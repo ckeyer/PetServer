@@ -1,6 +1,7 @@
 {
 	"app":{
 		"port":80,
-		"debug":true
+		"debug":true,
+		"img_dir":"/data/pet/"
 	}
 }

@@ -94,24 +94,18 @@ func Receive(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		http.Error(w, `{"error":"ParseFileForm  Failed"}`, http.StatusBadRequest)
 		log.Error(err.Error())
-		log.Debugf("%#v", f)
-		log.Debugf("%#v", fh)
 		return
 	}
 
 	//
-	_, err = io.Copy(buf, f)
+	size, err := io.Copy(buf, f)
 	if err != nil {
 		log.Error(err.Error())
 		return
 	}
 
-	bs := buf.Bytes()
-	log.Debugf("%s", bs)
 	hsha1 := req.Header.Get("X-Ckeyer-Sha1")
 	hsha2 := HmacSha1(buf.Bytes(), Token)
-	log.Debugf("Sha1 Mac: %s", hsha1)
-	log.Debugf("Sha2 Mac: %s", hsha2)
 	if hsha2 != hsha1 {
 		http.Error(w, `{"error":"Auth failed"}`, http.StatusNotAcceptable)
 		return
@@ -122,7 +116,7 @@ func Receive(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, `{"error":"Not Exists"}`, http.StatusNotFound)
 		return
 	}
-	log.Error(fh.Filename)
+	log.Notice(fh.Filename, ", ", FmtSize(size))
 
 	// finfo, err := os.Stat(dir)
 	// if err != nil {

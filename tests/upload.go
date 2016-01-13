@@ -18,7 +18,7 @@ var (
 )
 
 func main() {
-	Upload(url, "a.txt")
+	Upload(url, "/Users/ckeyer/Pictures/logo.jpg")
 }
 
 func Upload(url, path string) (err error) {
@@ -28,7 +28,7 @@ func Upload(url, path string) (err error) {
 	w := multipart.NewWriter(buf)
 	// defer w.Close()
 	// Create file field
-	fw, err := w.CreateFormFile("file", "test.txt") //这里的file很重要，必须和服务器端的FormFile一致
+	fw, err := w.CreateFormFile("file", "test.jpg") //这里的file很重要，必须和服务器端的FormFile一致
 	if err != nil {
 		fmt.Println("c")
 		return err
@@ -40,7 +40,6 @@ func Upload(url, path string) (err error) {
 		return err
 	}
 	filebs, _ := ioutil.ReadAll(fd)
-	fmt.Printf("Fild is :%s\n", filebs)
 
 	defer fd.Close()
 	// Write file field from file to upload
